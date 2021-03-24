@@ -1,0 +1,48 @@
+.table {
+  width: 95vw;
+  border-collapse: collapse;
+  margin: 1vw auto;
+}
+
+.table__delete-button {
+  background: none;
+  border: none;
+  padding: 0;
+  color: #069;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.table__input-row {
+  box-shadow: 0px 0px 0px 100000px #ccc;
+}
+
+.table__load-more {
+  border: 0;
+  background: none;
+  font-size: inherit;
+}
+
+td,
+th {
+  border: 1px solid #999;
+  padding: 0.5rem;
+  text-align: left;
+  font-weight: normal;
+}
+
+td[colspan='5'] {
+  text-align: center;
+}
+
+thead th.asc::after {
+  content: ' ↓';
+}
+
+thead th.desc::after {
+  content: ' ↑';
+}
+
+thead th.normal::after {
+  content: ' -';
+}
