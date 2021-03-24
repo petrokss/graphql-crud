@@ -13,12 +13,15 @@ const Table = () => {
   const [sortKey, setSortKey] = React.useState('');
   const [rowEditIndex, setRowEditIndex] = React.useState(null);
 
-  const { data, error, loading, refetch } = useQuery(GET_USERS_DATA, {
-    variables: {
-      offset: 0,
-      limit: 6,
-    },
-  });
+  const { data, error, loading, refetch, fetchMore } = useQuery(
+    GET_USERS_DATA,
+    {
+      variables: {
+        offset: 0,
+        limit: 6,
+      },
+    }
+  );
   const [removeUser] = useMutation(DELETE_USER);
   const [updateUser] = useMutation(UPDATE_USER);
 
@@ -27,12 +30,19 @@ const Table = () => {
   const removeData = (id, e) => {
     e.stopPropagation();
     removeUser({ variables: { id } }).then(() =>
-      refetch({ offset: tableData.length, limit: 0, sortKey, direction })
+      refetch({ offset: 0, limit: tableData.length, sortKey, direction })
     );
   };
 
   const handleFetchMore = () => {
-    refetch({ offset: tableData.length, limit: 6, sortKey, direction });
+    fetchMore({
+      variables: { offset: tableData.length },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        return {
+          users: prev.users.concat(fetchMoreResult.users),
+        };
+      },
+    });
   };
 
   const onFilterChange = (key) => {
@@ -49,8 +59,8 @@ const Table = () => {
     setDirection(next);
     setSortKey(key);
     refetch({
-      offset: tableData.length,
-      limit: 0,
+      offset: 0,
+      limit: tableData.length,
       sortKey: key,
       direction: next,
     });
@@ -115,13 +125,8 @@ const Table = () => {
       <tbody>{renderContent()}</tbody>
       <tfoot>
         <tr>
-          <td colSpan="5">
-            <button
-              className="table__load-more"
-              onClick={() => handleFetchMore()}
-            >
-              load more
-            </button>
+          <td colSpan="5" onClick={() => handleFetchMore()}>
+            load more
           </td>
         </tr>
       </tfoot>

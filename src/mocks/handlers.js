@@ -1,9 +1,9 @@
 import { graphql } from 'msw';
-import data from '../data.json';
+import data from './data.json';
 
 export const handlers = [
   graphql.query('getUsersData', (req, res, ctx) => {
-    const { offset, sortKey, direction, limit } = req.variables;
+    const { offset, sortKey, direction, limit = 0 } = req.variables;
     const sortedData = [...data];
     if (sortKey && direction) {
       sortedData.sort((a, b) => {
@@ -18,7 +18,7 @@ export const handlers = [
     }
     return res(
       ctx.data({
-        users: sortedData.slice(0, offset + limit),
+        users: sortedData.slice(offset, offset + limit),
       })
     );
   }),

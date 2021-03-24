@@ -1,6 +1,6 @@
 import React from 'react';
-import apolloClient from './graphql/config/initApollo';
 import { ApolloProvider } from '@apollo/client';
+import apolloClient from './graphql/config/initApollo';
 
 import Table from './components/Table';
 
